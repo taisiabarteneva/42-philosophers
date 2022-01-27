@@ -33,6 +33,11 @@ int check(int ac, char *av[])
 			" 1 and more than 199.\n");
 			return (FAILURE);
 		}
+		if ((i == 2 || i == 3 || i == 4) && ft_atoi_shell(av[i]) < 60)
+		{
+			printf("Philosophers activity must have a duration of 60 ms at least.\n");
+			return (FAILURE);
+		}
 		if (ft_atoi_shell(av[i]) <= MIN_VALUE)
 		{
 			printf("Parameter must be a positive number type of int.\n");

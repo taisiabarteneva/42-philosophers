@@ -1,6 +1,7 @@
 NAME 	= philo
 
-SRC 	= lib.c check.c main.c 
+SRC 	= 	lib.c 	check.c 	main.c 	init.c \
+			free.c 	threads.c
 
 D_SRC	= src
 D_OBJ	= obj

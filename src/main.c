@@ -12,51 +12,29 @@
 //pthread_mutex_lock,
 //pthread_mutex_unlock
 
-void *lifetime(void	*data)
+
+void *lifetime(void	*thread)
 {
-	data = (t_data *)data;
+	t_philosopher *philo;
+	philo = (t_philosopher *)thread;
 	while (1)
-	/*=
 	{
-		lock(min);
-		// print about taking the fork
-		lock(max);
-		// print about taking the fork
-		// print about eating
-		usleep(eating time * 1000) // dont forget about millisecond (!!!)
-		// gettimeofday(&last_eating_time);
-		lock(max);
-		lock(min);
-		// print about sleeping
-		usleep(sleeping time * 1000) // dont forget about millisecond (!!!)
-		// print about thinking
+		pthread_mutex_init(&philo->max.mutex, NULL);
+		pthread_mutex_init(&philo->min.mutex, NULL);
+		pthread_mutex_lock(&philo->max.mutex);
+		printf("Philosopher %d has taken a fork\n", philo->num);
+		pthread_mutex_unlock(&philo->min.mutex);
+		printf("Philosopher %d has taken a fork\n", philo->num);		
+		printf("Philosopher %d is eating\n", philo->num);		
+		usleep(200 * 1000); // eating time
+		gettimeofday(&last_meal_time);
+		pthread_mutex_unlock(&philo->min.mutex);
+		pthread_mutex_unlock(&philo->max.mutex);
+		printf("Philosopher %d is sleeping\n", philo->num);		
+		usleep(200 * 1000); // sleeping time
+		printf("Philosopher %d is thinking\n", philo->num);		
 	}
-	*/
 	return (NULL);
-}
-
-int init_threads(t_data *data)
-{
-	int i;
-
-	i = 0;
-	data->philos = (t_philosopher *)malloc(sizeof(t_philosopher) 
-									* data->constants.num_philo);
-	if (!data->philos)
-	{
-		printf("Malloc error\n");
-		return (FAILURE);
-	}
-	while (i < data->constants.num_philo)
-	{
-		if (pthread_create(&data->philos[i], NULL, lifetime, (void *)data) != 0)
-		{
-			printf("Can't init thread.");
-			return (FAILURE);
-		}
-		data->philos[i].num = i;
-		i++;
-	}
 }
 
 int main(int ac, char *av[])
@@ -67,20 +45,17 @@ int main(int ac, char *av[])
 	{
 		printf("Usage: ./philo <num_of_philo time_to_die time_to_sleep"
 			   " [number_of_times_each_philosopher_must_eat]\n");
-		return (FAILURE);
+		return (SUCCESS);
 	}
 	if (check(ac, av) == FAILURE)
-		return (FAILURE);	
+		return (SUCCESS);	
 	if ((data = init_data(av)) == NULL)
 		return (FAILURE);
 	if (init_threads(data) == FAILURE)
-	{
-		free(data);
-		return (FAILURE);
-	}
-	// mutex_init(data);
-
-
+		return (free_all(data));
+	if (end_threads(data) == FAILURE)
+		return (free_all(data));
+	
 	// check philo
 	return (SUCCESS);
 }

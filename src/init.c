@@ -15,6 +15,13 @@ t_data *init_data(char *av[])
 		data->constants.times_each_must_eat = ft_atoi(av[5]);
 	else
 		data->constants.times_each_must_eat = -1;
-	gettimeofday(&data->constants.program_start);
+	gettimeofday(&data->constants.program_start, NULL);
+	data->philos = (t_philosopher **)malloc(sizeof(t_philosopher *) 
+									* data->constants.num_philo);
+	if (!data->philos)
+	{
+		printf("Malloc error\n");
+		return (NULL);
+	}
 	return (data);
 }
