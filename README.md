@@ -1,6 +1,6 @@
 # philosophers
 
-The problem of five dining philosophers was stated by Edsger Dijkstra. It was designed to illustrate some commun issues in concurrent programming. 
+The problem of five dining philosophers was stated by Edsger Dijkstra. It was designed to illustrate some common issues in concurrent programming. 
 So here is my realization of the resource hierarchy solution originally proposed by Dijkstra.
 
 Specific rules in this version are :
