@@ -1,6 +1,6 @@
 # include "philo.h"
 
-void init_philo(t_data)
+// void init_philo(t_data);
 
 int init_threads(t_data *data)
 {
@@ -14,6 +14,14 @@ int init_threads(t_data *data)
 			return (FAILURE);
 		data->philos[i]->num = i;
 		data->philos[i]->eat_count = 0;
+		data->philos[i]->time_to_die = data->constants.time_to_die;
+		data->philos[i]->time_to_sleep = data->constants.time_to_sleep;
+		data->philos[i]->time_to_eat = data->constants.time_to_eat;
+		data->philos[i]->max = &data->max;
+		data->philos[i]->min = &data->min;
+		data->philos[i]->stdout_mutex = &data->stdout_mutex;
+		gettimeofday(&data->philos[i]->last_meal_time, NULL);
+
 		if (pthread_create(&data->philos[i]->t_id, NULL, 
 						&lifetime, (void *)(data->philos[i])) != SUCCESS)
 		{
