@@ -8,14 +8,14 @@ long int	get_time(void)
 	return (t.tv_sec * 1000 + t.tv_usec / 1000);
 }
 
-// void	custom_usleep(long int time)
-// {
-// 	long int	i;
+void	custom_usleep(long int time)
+{
+	long int	i;
 
-// 	i = get_time();
-// 	while (get_time() - i < time)
-// 		usleep(10);
-// }
+	i = get_time();
+	while (get_time() - i < time)
+		usleep(10);
+}
 
 void *lifetime(void *thread)
 {
@@ -29,29 +29,23 @@ void *lifetime(void *thread)
 	while (1)
     {
 		pthread_mutex_lock(&philo->left->mutex);
-		print_mutex(philo, 1, philo->num, time);
+		print_mutex(philo, TAKEN_FORK, philo->num, time);
 		pthread_mutex_lock(&philo->right->mutex);
 
-		print_mutex(philo, 1, philo->num, time);
-		print_mutex(philo, 2, philo->num, time);
+		print_mutex(philo, TAKEN_FORK, philo->num, time);
+		print_mutex(philo, EATING, philo->num, time);
 
-		usleep(philo->constants->time_to_eat * 1000);
-		// custom_usleep(philo->constants->time_to_eat); // EATING TIME 
+		custom_usleep(philo->constants->time_to_eat); 
 		gettimeofday(&philo->last_meal_time, NULL); // GET LAST EATING TIME 
 	
 		pthread_mutex_unlock(&philo->left->mutex);
 		pthread_mutex_unlock(&philo->right->mutex);
         philo->eat_count++;
-		// if (philo->eat_count == philo->constants->times_each_must_eat)
-		// {
-		// 	return (0);
-		// }
-		print_mutex(philo, 3, philo->num, time); // SLEEPING TIME
+		print_mutex(philo, SLEEPING, philo->num, time);
 
-		usleep(philo->constants->time_to_sleep * 1000);
-		// custom_usleep(philo->constants->time_to_sleep);
+		custom_usleep(philo->constants->time_to_sleep);
 
-		print_mutex(philo, 4, philo->num, time); // THINKING TIME
+		print_mutex(philo, THINKING, philo->num, time);
 		if (philo->dead == 1)
 			break ;
     }
@@ -98,6 +92,10 @@ void *watcher(void *data)
 			}
 			pthread_mutex_unlock(&new->philos[i].eating_mutex);
 			i++;
+			// if (new->philos[i].eat_count == new->philos[i].constants->times_each_must_eat)
+			// {
+			// 	return (0);
+			// }
 		}
 	}
 }
@@ -125,7 +123,6 @@ void exit_program(t_data *data)
 // 4 410 200 200 + !!!!!!!!!!!!!
 // 4 310 200 100 -
 
-
 int main(int ac, char *av[])
 {
     t_data *data;
@@ -140,7 +137,6 @@ int main(int ac, char *av[])
     if ((data = init_data(av)) == NULL)
         return (FAILURE);
     init_threads(data);
-    /* watcher or someone */
     watcher(data);
 	exit_program(data);
 	return (0);

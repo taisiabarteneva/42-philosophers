@@ -18,6 +18,11 @@
 # define NUM_PHILO  1
 # define MIN_VALUE  0
 
+# define TAKEN_FORK 1
+# define EATING		2
+# define SLEEPING	3
+# define THINKING	4
+
 typedef pthread_mutex_t t_mutex;
 typedef struct timeval t_timeval;
 
@@ -58,6 +63,7 @@ typedef struct s_data
 	t_philosopher 	*philos;
 	t_mutex			stdout_mutex;
 	t_fork			*forks;
+	pthread_t		watcher;
 } 				t_data;
 
 /* parse  */

@@ -6,6 +6,7 @@ int ft_atoi_shell(const char *str)
 
     if (ft_is_numeric_arg(str) == FAILURE)
     {
+        
         printf("Argument must be numeric.\n");
         exit(EXIT_FAILURE);
     }
