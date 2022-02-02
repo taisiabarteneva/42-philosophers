@@ -6,7 +6,9 @@
 # include <unistd.h>
 # include <limits.h>
 # include <pthread.h>
+# include <string.h>
 # include <sys/time.h>
+# include <time.h>
 
 
 # define FAILURE 	1
@@ -26,26 +28,25 @@ typedef struct s_constants
 	int 		time_to_eat;
 	int 		time_to_sleep;
 	int 		times_each_must_eat;
-	t_timeval	program_start;
+	t_timeval		program_start;
 }				t_constants;
 
 typedef struct	s_fork
 {
 	int 		num;
-	t_mutex		mutex;
+	t_mutex		mutex;	
 }				t_fork;
 
 typedef struct 	s_philosopher
 {
-	int			num;
+	int 		num;
 	int			eat_count;
-	int 		time_to_die;
-	int 		time_to_sleep;
-	int 		time_to_eat;
+	int			dead;
 	pthread_t	t_id;
 	t_fork		*min;
 	t_fork		*max;
 
+	t_constants *constants;
 	t_timeval	last_meal_time;
 	t_mutex		*stdout_mutex;
 	t_mutex		eating_mutex;
@@ -56,7 +57,7 @@ typedef struct s_data
 	t_fork			min;
 	t_fork			max;
 	t_constants		constants;
-	t_philosopher 	**philos;
+	t_philosopher 	*philos;
 	t_mutex			stdout_mutex;
 } 				t_data;
 
@@ -67,14 +68,15 @@ long	ft_atoi(const char *str);
 int 	check(int ac, char *av[]);
 
 /* init */
+
 /* inits t_data struct's field constants */
-t_data 	*init_data(char *av[]);
+t_data *init_data(char *av[]);
 
 /* threads management*/
 /* inits threads in a while loop */
 int 	init_threads(t_data *data);
 /* joins threads in a while loop */
-int 	end_threads(t_data *data);
+int 	join_threads(t_data *data);
 
 /* simulates philo's life cycle */
 void 	*lifetime(void	*data);
@@ -83,7 +85,9 @@ void 	*lifetime(void	*data);
 int 	free_all(t_data *data);
 
 /*  */
-void	print_mutex(const char *str, t_mutex *stdout_mutex);
+void	print_mutex(t_philosopher *thread, int flag, int num, int time);
 void 	*spectate(void *data);
+
+time_t	do_newtime(time_t start);
 
 #endif

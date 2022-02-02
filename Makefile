@@ -1,7 +1,7 @@
 NAME 	= philo
 
-SRC 	= 	lib.c 	check.c 	main.c 	init.c \
-			free.c 	threads.c
+SRC 	= 	lib.c 	check.c 	main.c\
+			free.c	init.c		threads.c\
 
 D_SRC	= src
 D_OBJ	= obj
@@ -14,8 +14,6 @@ OPT		= -O3
 
 PINK 		=  \033[1;35m
 NO_COLOR 	=	\033[0m 
-
-# 1;35m
 
 all : $(NAME)
 
