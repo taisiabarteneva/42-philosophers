@@ -3,14 +3,14 @@
 int init_threads(t_data *data)
 {
     int i;
-    i = 1;
+
+    i = 0;
 
     while (i < data->constants.num_philo)
     {
 		if (pthread_create(&data->philos[i].t_id, NULL, &lifetime, (void *)&data->philos[i]) != SUCCESS)
             return (FAILURE);
-        if (i % 2 == 1)
-            usleep(100);
+		pthread_detach(data->philos[i].t_id);
         i++;
     }
     return (SUCCESS);

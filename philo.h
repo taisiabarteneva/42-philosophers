@@ -28,7 +28,7 @@ typedef struct s_constants
 	int 		time_to_eat;
 	int 		time_to_sleep;
 	int 		times_each_must_eat;
-	t_timeval		program_start;
+	t_timeval	program_start;
 }				t_constants;
 
 typedef struct	s_fork
@@ -43,8 +43,8 @@ typedef struct 	s_philosopher
 	int			eat_count;
 	int			dead;
 	pthread_t	t_id;
-	t_fork		*min;
-	t_fork		*max;
+	t_fork		*right;
+	t_fork		*left;
 
 	t_constants *constants;
 	t_timeval	last_meal_time;
@@ -54,11 +54,10 @@ typedef struct 	s_philosopher
 
 typedef struct s_data
 {
-	t_fork			min;
-	t_fork			max;
 	t_constants		constants;
 	t_philosopher 	*philos;
 	t_mutex			stdout_mutex;
+	t_fork			*forks;
 } 				t_data;
 
 /* parse  */
@@ -85,9 +84,12 @@ void 	*lifetime(void	*data);
 int 	free_all(t_data *data);
 
 /*  */
-void	print_mutex(t_philosopher *thread, int flag, int num, int time);
+// void	print_mutex(t_philosopher *thread, int flag, int num);
+void	print_mutex(t_philosopher *thread, int flag, int num, long time);
+
 void 	*spectate(void *data);
 
 time_t	do_newtime(time_t start);
+
 
 #endif
