@@ -36,6 +36,7 @@ int init_philos(t_data *data)
         data->philos[i].num = i + 1; 
         data->philos[i].stdout_mutex = &data->stdout_mutex;
 		data->philos[i].dead = 0;
+		
 		data->philos[i].eat_count = 0;
 		gettimeofday(&data->philos[i].last_meal_time, NULL);
 		pthread_mutex_init(&data->philos[i].eating_mutex, NULL);

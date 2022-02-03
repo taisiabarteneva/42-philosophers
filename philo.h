@@ -45,6 +45,7 @@ typedef struct	s_fork
 typedef struct 	s_philosopher
 {
 	int 		num;
+	int			must_die;
 	int			eat_count;
 	int			dead;
 	pthread_t	t_id;

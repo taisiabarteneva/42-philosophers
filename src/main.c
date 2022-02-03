@@ -20,34 +20,47 @@ void	custom_usleep(long int time)
 void *lifetime(void *thread)
 {
     t_philosopher	*philo;
+	t_mutex	*min = &((t_philosopher *)thread)->left->mutex;
+	t_mutex	*max = &((t_philosopher *)thread)->right->mutex;
 	long 			time;
 
     philo = (t_philosopher *)thread;
+	if (philo->left->num > philo->right->num)
+	{
+		min = &((t_philosopher *)thread)->right->mutex;
+		max = &((t_philosopher *)thread)->left->mutex;
+	}
 	if (philo->num % 2 == 0) 
 		usleep(1000);
 	time = philo->constants->program_start.tv_sec * 1000 + philo->constants->program_start.tv_usec / 1000;
 	while (1)
     {
-		pthread_mutex_lock(&philo->left->mutex);
+		pthread_mutex_lock(min); //pthread_mutex_lock(&philo->left->mutex); // min
 		print_mutex(philo, TAKEN_FORK, philo->num, time);
-		pthread_mutex_lock(&philo->right->mutex);
+		pthread_mutex_lock(max); //pthread_mutex_lock(&philo->right->mutex); // max
 
 		print_mutex(philo, TAKEN_FORK, philo->num, time);
 		print_mutex(philo, EATING, philo->num, time);
 
 		custom_usleep(philo->constants->time_to_eat); 
+		// 
+		pthread_mutex_lock(&philo->eating_mutex);
 		gettimeofday(&philo->last_meal_time, NULL);
-	
-		pthread_mutex_unlock(&philo->left->mutex);
-		pthread_mutex_unlock(&philo->right->mutex);
         philo->eat_count++;
+		pthread_mutex_unlock(&philo->eating_mutex);
 		print_mutex(philo, SLEEPING, philo->num, time);
+		pthread_mutex_unlock(max);//pthread_mutex_unlock(&philo->right->mutex); // max
+		pthread_mutex_unlock(min);//pthread_mutex_unlock(&philo->left->mutex); // min
 
 		custom_usleep(philo->constants->time_to_sleep);
 
 		print_mutex(philo, THINKING, philo->num, time);
 		if (philo->dead == 1)
 			break ;
+		if (philo->must_die == 1)
+		{
+			return (0);
+		}
     }
     return (NULL);
 }
@@ -80,21 +93,27 @@ void *watcher(void *data)
 	while (1)
 	{
 		i = 0;
+		int j = 0;
 		count = 0;
 		while (i < new->constants.num_philo)
 		{
 			gettimeofday(&curr, NULL);
 			pthread_mutex_lock(&new->philos[i].eating_mutex);
-			if ((curr.tv_sec - new->philos[i].last_meal_time.tv_sec) * 1000 + (curr.tv_usec - new->philos[i].last_meal_time.tv_usec)/1000 > new->constants.time_to_die + 5)
+			if ((curr.tv_sec - new->philos[i].last_meal_time.tv_sec) * 1000 + (curr.tv_usec - new->philos[i].last_meal_time.tv_usec)/1000 > new->constants.time_to_die)
 			{
 				pthread_mutex_unlock(&new->philos[i].eating_mutex);
 				new->philos[i].dead = 1;
 				print_mutex(&new->philos[i], 7, new->philos[i].num, (new->constants.program_start.tv_sec * 1000 + new->constants.program_start.tv_usec / 1000));
+				while (j < new->constants.num_philo)
+				{
+					new->philos[j].must_die = 1;
+					j++;
+				}
 				return (0);
 			}
-			pthread_mutex_unlock(&new->philos[i].eating_mutex);
 			if (new->philos[i].eat_count >= new->constants.times_each_must_eat && new->constants.times_each_must_eat != -222)
 				count++;
+			pthread_mutex_unlock(&new->philos[i].eating_mutex);
 			if (count == new->constants.num_philo)
 				return (0);
 			i++;
@@ -102,16 +121,21 @@ void *watcher(void *data)
 	}
 }
 
-// 1 800 200 200 -
-// 5 800 200 200 +
-// 5 800 200 200 7 + 
-// 4 410 200 200 + !!!!!!!!!!!!!
-// 4 310 200 100 -
+// 1 800 200 200 -					works
+// 5 800 200 200 +					deadlock
+// 5 800 200 200 7 + 				works
+// 4 410 200 200 +					deadlock
+// 4 310 200 100 -					works
+
+// ./philo 50 210 100 100			works
+// ./philo 199 2000 600 60			does not work
+// ./philo 7 190 60 60				deadlock
+// ./philo 8 130 60 60				works
 
 /* 
 TODO
  - my calloc
- - additional arg (times each must eat)
+ - data race
  - add colors to stdout
  - norme
  */
