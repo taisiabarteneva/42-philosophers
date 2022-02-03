@@ -20,8 +20,8 @@ int init_philos(t_data *data)
     
     i = 0;
     num = data->constants.num_philo;
-    data->philos = (t_philosopher *)malloc(sizeof(t_philosopher) * num);
-	data->forks = (t_fork *)calloc(sizeof(t_fork), num);
+    data->philos = (t_philosopher *)my_calloc(sizeof(t_philosopher), num);
+	data->forks = (t_fork *)my_calloc(sizeof(t_fork), num);
 	for (size_t i = 0; i < (size_t)num; ++i) 
 	{
 		pthread_mutex_init(&(data->forks[i].mutex), NULL);
@@ -29,19 +29,16 @@ int init_philos(t_data *data)
     memset(data->philos, 0, sizeof(t_philosopher));
     while (i < num)
     {
-		data->philos[i].left = &(data->forks[i]);
-		data->philos[i].right = &(data->forks[(i + 1) % num]);
-
+		data->philos[i].min = &(data->forks[i]);
+		data->philos[i].max = &(data->forks[(i + 1) % num]);
         data->philos[i].constants = &data->constants;
         data->philos[i].num = i + 1; 
         data->philos[i].stdout_mutex = &data->stdout_mutex;
-		data->philos[i].dead = 0;
-		
 		data->philos[i].eat_count = 0;
 		gettimeofday(&data->philos[i].last_meal_time, NULL);
 		pthread_mutex_init(&data->philos[i].eating_mutex, NULL);
+		pthread_mutex_init(&data->philos[i].dead, NULL);
         i++;
-		// init maybe 
     }
     return (SUCCESS);
 }

@@ -1,7 +1,8 @@
 NAME 	= philo
 
-SRC 	= 	lib.c 	check.c 	main.c\
-			free.c	init.c		threads.c\
+SRC 	= 	lib.c 		check.c 	main.c\
+			free.c		init.c		threads.c\
+			utils.c		print.c		monitor.c
 
 D_SRC	= src
 D_OBJ	= obj
@@ -9,7 +10,7 @@ D_OBJ	= obj
 SRC 	:= $(SRC:%.c=$(D_SRC)/%.c)
 OBJ 	= $(SRC:$(D_SRC)/%.c=$(D_OBJ)/%.o)
 
-FLAGS 	= -Wall -Werror -Wextra -pthread -fsanitize=thread -g
+FLAGS 	= -Wall -Werror -Wextra -pthread -g
 OPT		= -O3
 
 PINK 		=  \033[1;35m

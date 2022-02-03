@@ -22,6 +22,14 @@
 # define EATING		2
 # define SLEEPING	3
 # define THINKING	4
+# define DEAD		7
+
+# define YELLOW		"\x1B[33m"
+# define MAGENTA	"\x1B[34m"
+# define BLUE		"\x1B[36m"
+# define PINK		"\x1B[35m"
+# define GREEN		"\x1B[32m"
+# define NC			"\033[0m"
 
 typedef pthread_mutex_t t_mutex;
 typedef struct timeval t_timeval;
@@ -47,15 +55,15 @@ typedef struct 	s_philosopher
 	int 		num;
 	int			must_die;
 	int			eat_count;
-	int			dead;
 	pthread_t	t_id;
-	t_fork		*right;
-	t_fork		*left;
+	t_fork		*max;
+	t_fork		*min;
 
 	t_constants *constants;
 	t_timeval	last_meal_time;
 	t_mutex		*stdout_mutex;
 	t_mutex		eating_mutex;
+	t_mutex		dead;
 } 				t_philosopher;
 
 typedef struct s_data
@@ -67,35 +75,37 @@ typedef struct s_data
 	pthread_t		watcher;
 } 				t_data;
 
-/* parse  */
+/* PARSE  */
 int		ft_atoi_shell(const char *str);
 int 	ft_is_numeric_arg(const char *str);
 long	ft_atoi(const char *str);
 int 	check(int ac, char *av[]);
 
-/* init */
-
-/* inits t_data struct's field constants */
+/* INIT*/
 t_data *init_data(char *av[]);
 
-/* threads management*/
+/* THREADS */
 /* inits threads in a while loop */
 int 	init_threads(t_data *data);
 /* joins threads in a while loop */
-int 	join_threads(t_data *data);
+void 	join_threads(t_data *data);
 
-/* simulates philo's life cycle */
+/* SIMULATION */
 void 	*lifetime(void	*data);
 
-/* frees an array of t_philosopher structs and data struct */
+/* MONITOR */
+void 	*monitor(void *data);
+
+/* FINISH */
 void 	free_all(t_data *data);
-void	 exit_program(t_data *data);
+void	exit_program(t_data *data);
 
+/* UTILS */
+void	custom_usleep(long int time);
+long	get_time(void);
+long	convert_time(t_timeval val);
+long	find_diff(t_timeval val1, t_timeval val2);
+void	*my_calloc(size_t size, size_t count);
 void	print_mutex(t_philosopher *thread, int flag, int num, long time);
-
-void 	*spectate(void *data);
-
-time_t	do_newtime(time_t start);
-
 
 #endif

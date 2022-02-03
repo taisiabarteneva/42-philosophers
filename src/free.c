@@ -23,6 +23,7 @@ void exit_program(t_data *data)
 	{
 		pthread_mutex_destroy(&data->forks[i].mutex);
 		pthread_mutex_destroy(&data->philos[i].eating_mutex);
+		pthread_mutex_destroy(&data->philos[i].dead);
 		i++;
 	}
 	pthread_mutex_destroy(&data->stdout_mutex);
