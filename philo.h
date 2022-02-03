@@ -87,10 +87,9 @@ int 	join_threads(t_data *data);
 void 	*lifetime(void	*data);
 
 /* frees an array of t_philosopher structs and data struct */
-int 	free_all(t_data *data);
+void 	free_all(t_data *data);
+void	 exit_program(t_data *data);
 
-/*  */
-// void	print_mutex(t_philosopher *thread, int flag, int num);
 void	print_mutex(t_philosopher *thread, int flag, int num, long time);
 
 void 	*spectate(void *data);

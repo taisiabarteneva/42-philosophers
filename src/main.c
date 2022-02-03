@@ -36,7 +36,7 @@ void *lifetime(void *thread)
 		print_mutex(philo, EATING, philo->num, time);
 
 		custom_usleep(philo->constants->time_to_eat); 
-		gettimeofday(&philo->last_meal_time, NULL); // GET LAST EATING TIME 
+		gettimeofday(&philo->last_meal_time, NULL);
 	
 		pthread_mutex_unlock(&philo->left->mutex);
 		pthread_mutex_unlock(&philo->right->mutex);
@@ -74,16 +74,18 @@ void *watcher(void *data)
 	t_data 		*new;
 	t_timeval	curr;
 	int 		i;
+	int			count;
 
 	new = (t_data *)data;
 	while (1)
 	{
 		i = 0;
+		count = 0;
 		while (i < new->constants.num_philo)
 		{
 			gettimeofday(&curr, NULL);
 			pthread_mutex_lock(&new->philos[i].eating_mutex);
-			if ((curr.tv_sec - new->philos[i].last_meal_time.tv_sec) * 1000 + (curr.tv_usec - new->philos[i].last_meal_time.tv_usec)/1000 > new->constants.time_to_die)
+			if ((curr.tv_sec - new->philos[i].last_meal_time.tv_sec) * 1000 + (curr.tv_usec - new->philos[i].last_meal_time.tv_usec)/1000 > new->constants.time_to_die + 5)
 			{
 				pthread_mutex_unlock(&new->philos[i].eating_mutex);
 				new->philos[i].dead = 1;
@@ -91,30 +93,13 @@ void *watcher(void *data)
 				return (0);
 			}
 			pthread_mutex_unlock(&new->philos[i].eating_mutex);
+			if (new->philos[i].eat_count >= new->constants.times_each_must_eat && new->constants.times_each_must_eat != -222)
+				count++;
+			if (count == new->constants.num_philo)
+				return (0);
 			i++;
-			// if (new->philos[i].eat_count == new->philos[i].constants->times_each_must_eat)
-			// {
-			// 	return (0);
-			// }
 		}
 	}
-}
-
-void exit_program(t_data *data)
-{
-	size_t i;
-	size_t num;
-	
-	i = 0;
-	num = data->constants.num_philo;
-	while (i < num)
-	{
-		pthread_mutex_destroy(&data->forks[i].mutex);
-		pthread_mutex_destroy(&data->philos[i].eating_mutex);
-		i++;
-	}
-	pthread_mutex_destroy(&data->stdout_mutex);
-	free(data);
 }
 
 // 1 800 200 200 -
@@ -123,11 +108,19 @@ void exit_program(t_data *data)
 // 4 410 200 200 + !!!!!!!!!!!!!
 // 4 310 200 100 -
 
+/* 
+TODO
+ - my calloc
+ - additional arg (times each must eat)
+ - add colors to stdout
+ - norme
+ */
+
 int main(int ac, char *av[])
 {
     t_data *data;
     if (ac != 5 && ac != 6)
-    {
+    {	
         printf("Usage: ./philo <num_of_philo time_to_die time_to_sleep"
                " [number_of_times_each_philosopher_must_eat]\n");
         return (FAILURE);

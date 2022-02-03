@@ -9,7 +9,7 @@ D_OBJ	= obj
 SRC 	:= $(SRC:%.c=$(D_SRC)/%.c)
 OBJ 	= $(SRC:$(D_SRC)/%.c=$(D_OBJ)/%.o)
 
-FLAGS 	= -Wall -Werror -Wextra 
+FLAGS 	= -Wall -Werror -Wextra -pthread
 OPT		= -O3
 
 PINK 		=  \033[1;35m

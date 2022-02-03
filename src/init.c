@@ -9,7 +9,7 @@ void init_constants(t_constants *constants, char *av[])
     if (av[5])
         constants->times_each_must_eat = ft_atoi(av[5]);
     else
-        constants->times_each_must_eat = 0;
+        constants->times_each_must_eat = -222;
     gettimeofday(&constants->program_start, NULL);
 }
 
