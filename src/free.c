@@ -1,6 +1,18 @@
-# include "philo.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: wurrigon <wurrigon@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/02/04 21:41:47 by wurrigon          #+#    #+#             */
+/*   Updated: 2022/02/05 02:38:17 by wurrigon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void free_all(t_data *data)
+#include "philo.h"
+
+static void	free_all(t_data *data)
 {
 	if (data)
 	{
@@ -12,11 +24,11 @@ void free_all(t_data *data)
 	}
 }
 
-void exit_program(t_data *data)
+void	exit_program(t_data *data)
 {
-	size_t i;
-	size_t num;
-	
+	size_t	i;
+	size_t	num;
+
 	i = 0;
 	num = data->constants.num_philo;
 	while (i < num)

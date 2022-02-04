@@ -36,34 +36,33 @@ typedef struct timeval t_timeval;
 
 typedef struct s_constants
 {
-	int 		num_philo;
-	int 		time_to_die;
-	int 		time_to_eat;
-	int 		time_to_sleep;
-	int 		times_each_must_eat;
-	t_timeval	program_start;
+	int 			num_philo;
+	int 			time_to_die;
+	int 			time_to_eat;
+	int 			time_to_sleep;
+	int 			times_each_must_eat;
+	t_timeval		program_start;
 }				t_constants;
 
 typedef struct	s_fork
 {
-	int 		num;
-	t_mutex		mutex;	
+	int 			num;
+	t_mutex			mutex;	
 }				t_fork;
 
 typedef struct 	s_philosopher
 {
-	int 		num;
-	int			must_die;
-	int			eat_count;
-	pthread_t	t_id;
-	t_fork		*max;
-	t_fork		*min;
-
-	t_constants *constants;
-	t_timeval	last_meal_time;
-	t_mutex		*stdout_mutex;
-	t_mutex		eating_mutex;
-	t_mutex		dead;
+	int 			num;
+	int				must_die;
+	int				eat_count;
+	pthread_t		t_id;
+	t_fork			*max;
+	t_fork			*min;
+	t_constants 	*constants;
+	t_timeval		last_meal_time;
+	t_mutex			*stdout_mutex;
+	t_mutex			eating_mutex;
+	t_mutex			dead;
 } 				t_philosopher;
 
 typedef struct s_data
@@ -94,11 +93,10 @@ void 	join_threads(t_data *data);
 void 	*lifetime(void	*data);
 
 /* MONITOR */
-// void 	*monitor(void *data);
-void *watcher(void *data);
+void 	*monitor(void *data);
+// void 		*watcher(void *data);
 
 /* FINISH */
-void 	free_all(t_data *data);
 void	exit_program(t_data *data);
 
 /* UTILS */
