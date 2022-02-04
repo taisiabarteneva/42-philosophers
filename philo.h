@@ -94,7 +94,8 @@ void 	join_threads(t_data *data);
 void 	*lifetime(void	*data);
 
 /* MONITOR */
-void 	*monitor(void *data);
+// void 	*monitor(void *data);
+void *watcher(void *data);
 
 /* FINISH */
 void 	free_all(t_data *data);
