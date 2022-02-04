@@ -28,7 +28,7 @@ void	cycle(t_philosopher *philo, t_mutex *min, t_mutex *max, long time)
 		if (philo->must_die == 1)
 		{
 			pthread_mutex_unlock(&philo->dead);
-			return ;
+			break ;
 		}
 		pthread_mutex_unlock(&philo->dead);
 	}
@@ -68,6 +68,7 @@ int		init_threads(t_data *data)
     {
 		if (pthread_create(&data->philos[i].t_id, NULL, &lifetime, (void *)&data->philos[i]) != SUCCESS)
             return (FAILURE);
+		// pthread_detach(data->philos[i].t_id);
         i++;
     }
     return (SUCCESS);

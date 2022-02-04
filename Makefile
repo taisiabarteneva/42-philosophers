@@ -10,7 +10,7 @@ D_OBJ	= obj
 SRC 	:= $(SRC:%.c=$(D_SRC)/%.c)
 OBJ 	= $(SRC:$(D_SRC)/%.c=$(D_OBJ)/%.o)
 
-FLAGS 	= -Wall -Werror -Wextra -pthread -g
+FLAGS 	= -Wall -Werror -Wextra -pthread # -fsanitize=thread -g
 OPT		= -O3
 
 PINK 		=  \033[1;35m

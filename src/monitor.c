@@ -1,6 +1,5 @@
 # include "philo.h"
 
-
 void check_all_ate(t_data *data, int i, int *count)
 {
 	int eat_count;
@@ -47,7 +46,7 @@ void monitor_extra(t_data *data)
 		if (time_since_meal > data->constants.time_to_die)
 		{
 			pthread_mutex_unlock(&data->philos[i].eating_mutex);
-			print_mutex(&data->philos[i], 7, data->philos[i].num, 
+			print_mutex(&data->philos[i], DEAD, data->philos[i].num, 
 					convert_time(data->constants.program_start));
 			set_death_flag(data);
 			return ;

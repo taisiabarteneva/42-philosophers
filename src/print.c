@@ -13,7 +13,7 @@ static void	print_message(int flag, int num, long time)
 	else if (flag == DEAD)
 	{
 		printf(GREEN"%ld %d died\n"NC, get_time() - time, num);
-		// return ;
+		return ;
 	}
 }
 
