@@ -5,8 +5,11 @@ A philisopher always takes a lower-numbered fork first and then higher-numbered 
 
 A program takes following arguments:
 ◦ number_of_philosophers
+
 ◦ time_to_die (in milliseconds)
+
 ◦ time_to_eat (in milliseconds)
+
 ◦ time_to_sleep (in milliseconds) (optional)
 
 Built :
