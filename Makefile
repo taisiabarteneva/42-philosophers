@@ -6,7 +6,7 @@ SRC 	= 	lib.c 		check.c 	main.c\
 
 D_SRC	= src
 D_OBJ	= obj
-INCL	= philo.h
+INCL	= philo.h color.h
 
 SRC 	:= $(SRC:%.c=$(D_SRC)/%.c)
 OBJ 	= $(SRC:$(D_SRC)/%.c=$(D_OBJ)/%.o)
