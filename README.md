@@ -1,7 +1,7 @@
 # 42-philosophers
 A solution to dining philosophers problem using threads and mutexes. It is one of the classic problems used to describe synchronization issues in a multithreading program.
 
-## What did I learn
+## What have I learned
 - Threads
 - Synchronization primitives such as mutex and semaphore
 
