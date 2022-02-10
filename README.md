@@ -23,3 +23,6 @@ Run with you parameters, e.g. :
 ```
 $> ./philo 5 800 200 200 7
 ```
+
+
+![Screen Shot 2022-02-10 at 5 52 13 PM](https://user-images.githubusercontent.com/95509213/153433035-b44bd562-28c2-4342-bd34-92a7a7585015.png)
